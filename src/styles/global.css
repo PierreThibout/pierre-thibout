@@ -676,6 +676,183 @@ footer p {
 
 
 /* =========================================================
+   Page Partitions
+   ========================================================= */
+
+.partitions-page {
+  width: min(1100px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 45px 0 110px;
+}
+
+.partitions-page .page-header {
+  padding-top: 0;
+  margin-bottom: 75px;
+  max-width: 850px;
+}
+
+.partitions-intro {
+  max-width: 680px;
+  margin-bottom: 80px;
+}
+
+.partitions-intro p {
+  margin: 0;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.7rem);
+  line-height: 1.2;
+}
+
+.partition-list {
+  width: 100%;
+}
+
+.partition-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 60px;
+  padding: 30px 0;
+  border-top: 1px solid #ddd;
+}
+
+.partition-item:last-child {
+  border-bottom: 1px solid #ddd;
+}
+
+.partition-composer {
+  margin: 0 0 7px;
+  color: #9d7946;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.partition-main h2 {
+  margin: 0;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(2rem, 3vw, 3rem);
+  font-weight: 500;
+  line-height: 1;
+}
+
+.partition-description {
+  max-width: 600px;
+  margin: 12px 0 0;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.partition-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 25px;
+}
+
+.partition-type {
+  color: #777;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.partition-download {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid #c6a36a;
+  padding-bottom: 5px;
+  transition: color 0.2s ease;
+}
+
+.partition-download:hover {
+  color: #9d7946;
+}
+
+@media (max-width: 750px) {
+  .partitions-page {
+    padding: 35px 0 80px;
+  }
+
+  .partitions-page .page-header {
+    margin-bottom: 55px;
+  }
+
+  .partitions-intro {
+    margin-bottom: 60px;
+  }
+
+  .partitions-intro p {
+    font-size: 1.9rem;
+  }
+
+  .partition-item {
+    display: block;
+    padding: 25px 0;
+  }
+
+  .partition-main h2 {
+    font-size: 2.2rem;
+  }
+
+  .partition-meta {
+    margin-top: 25px;
+    gap: 15px;
+  }
+}
+
+
+/* =========================================================
+   Pages en construction
+   ========================================================= */
+
+.coming-soon-page {
+  width: min(1100px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 45px 0 110px;
+}
+
+.coming-soon-page .page-header {
+  padding-top: 0;
+  margin-bottom: 75px;
+  max-width: 850px;
+}
+
+.coming-soon-intro {
+  max-width: 680px;
+  margin-bottom: 80px;
+}
+
+.coming-soon-intro p {
+  margin: 0;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.7rem);
+  line-height: 1.2;
+}
+
+@media (max-width: 750px) {
+  .coming-soon-page {
+    padding: 35px 0 80px;
+  }
+
+  .coming-soon-page .page-header {
+    margin-bottom: 55px;
+  }
+
+  .coming-soon-intro {
+    margin-bottom: 60px;
+  }
+
+  .coming-soon-intro p {
+    font-size: 1.9rem;
+  }
+}
+
+
+/* =========================================================
    Responsive — tablette
    ========================================================= */
 
@@ -759,10 +936,10 @@ footer p {
     background:
       linear-gradient(
         180deg,
-        #050708 0%,
-        rgba(5, 7, 8, 0.96) 24%,
-        rgba(5, 7, 8, 0.72) 43%,
-        rgba(5, 7, 8, 0.28) 67%,
+        rgba(5, 7, 8, 0.72) 0%,
+        rgba(5, 7, 8, 0.68) 22%,
+        rgba(5, 7, 8, 0.48) 42%,
+        rgba(5, 7, 8, 0.18) 68%,
         rgba(5, 7, 8, 0) 100%
       );
   }
@@ -996,180 +1173,5 @@ footer p {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-  }
-}
-
-/* =========================================================
-   Pages en construction
-   ========================================================= */
-
-.coming-soon-page {
-  width: min(1100px, calc(100% - 40px));
-  margin: 0 auto;
-  padding: 45px 0 110px;
-}
-
-.coming-soon-page .page-header {
-  padding-top: 0;
-  margin-bottom: 75px;
-  max-width: 850px;
-}
-
-.coming-soon-intro {
-  max-width: 680px;
-  margin-bottom: 80px;
-}
-
-.coming-soon-intro p {
-  margin: 0;
-  font-family: "Cormorant Garamond", serif;
-  font-size: clamp(1.8rem, 3.5vw, 2.7rem);
-  line-height: 1.2;
-}
-
-@media (max-width: 750px) {
-  .coming-soon-page {
-    padding: 35px 0 80px;
-  }
-
-  .coming-soon-page .page-header {
-    margin-bottom: 55px;
-  }
-
-  .coming-soon-intro {
-    margin-bottom: 60px;
-  }
-
-  .coming-soon-intro p {
-    font-size: 1.9rem;
-  }
-}
-
-/* =========================================================
-   Page Partitions
-   ========================================================= */
-
-.partitions-page {
-  width: min(1100px, calc(100% - 40px));
-  margin: 0 auto;
-  padding: 45px 0 110px;
-}
-
-.partitions-page .page-header {
-  padding-top: 0;
-  margin-bottom: 75px;
-  max-width: 850px;
-}
-
-.partitions-intro {
-  max-width: 680px;
-  margin-bottom: 80px;
-}
-
-.partitions-intro p {
-  margin: 0;
-  font-family: "Cormorant Garamond", serif;
-  font-size: clamp(1.8rem, 3.5vw, 2.7rem);
-  line-height: 1.2;
-}
-
-.partition-list {
-  width: 100%;
-}
-
-.partition-item {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 280px;
-  gap: 60px;
-  padding: 30px 0;
-  border-top: 1px solid #ddd;
-}
-
-.partition-item:last-child {
-  border-bottom: 1px solid #ddd;
-}
-
-.partition-composer {
-  margin: 0 0 7px;
-  color: #9d7946;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.partition-main h2 {
-  margin: 0;
-  font-family: "Cormorant Garamond", serif;
-  font-size: clamp(2rem, 3vw, 3rem);
-  font-weight: 500;
-  line-height: 1;
-}
-
-.partition-description {
-  max-width: 600px;
-  margin: 12px 0 0;
-  color: #666;
-  font-size: 0.9rem;
-  line-height: 1.5;
-}
-
-.partition-meta {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 25px;
-}
-
-.partition-type {
-  color: #777;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.partition-download {
-  color: inherit;
-  text-decoration: none;
-  border-bottom: 1px solid #c6a36a;
-  padding-bottom: 5px;
-  transition: color 0.2s ease;
-}
-
-.partition-download:hover {
-  color: #9d7946;
-}
-
-@media (max-width: 750px) {
-  .partitions-page {
-    padding: 35px 0 80px;
-  }
-
-  .partitions-page .page-header {
-    margin-bottom: 55px;
-  }
-
-  .partitions-intro {
-    margin-bottom: 60px;
-  }
-
-  .partitions-intro p {
-    font-size: 1.9rem;
-  }
-
-  .partition-item {
-    display: block;
-    padding: 25px 0;
-  }
-
-  .partition-main h2 {
-    font-size: 2.2rem;
-  }
-
-  .partition-meta {
-    margin-top: 25px;
-    gap: 15px;
   }
 }
