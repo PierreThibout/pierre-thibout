@@ -1,0 +1,127 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+export async function getStaticPaths() {
+  const concerts = await getCollection("concerts");
+
+  return concerts.map((concert) => ({
+    params: {
+      slug: concert.id,
+    },
+    props: {
+      concert,
+    },
+  }));
+}
+
+const { concert } = Astro.props;
+const { Content } = await render(concert);
+
+function formatDate(date: Date) {
+  return date
+    .toLocaleDateString("fr-FR", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    })
+    .replace(/^./, (letter) => letter.toUpperCase());
+}
+
+function formatTime(time: string) {
+  return time.replace(":", "h");
+}
+---
+
+<Layout title={concert.data.title}>
+  <main class="concert-page">
+
+    <header class="concert-header">
+      <p class="eyebrow">Concert</p>
+
+      <h1>{concert.data.title}</h1>
+
+      <p class="concert-date-large">
+        {formatDate(concert.data.date)}
+        {" à "}
+        {formatTime(concert.data.time)}
+      </p>
+
+      <p class="concert-place">
+        {concert.data.venue} · {concert.data.city}
+      </p>
+    </header>
+
+    <div class="concert-content">
+
+      <section class="concert-description">
+        <Content />
+
+        {
+          concert.data.description_author && (
+            <p class="description-author">
+              Texte : {concert.data.description_author}
+            </p>
+          )
+        }
+      </section>
+
+      <aside class="concert-details">
+
+        <div class="concert-detail-block">
+          <h2>Programme</h2>
+
+          {
+            concert.data.program.map((piece) => (
+              <div class="program-piece">
+                <p>{piece.composer}</p>
+                <em>{piece.work}</em>
+              </div>
+            ))
+          }
+        </div>
+
+        <div class="concert-detail-block">
+          <h2>Partenaires</h2>
+
+          <ul class="partners-list">
+            {
+              concert.data.partners.map((partner) => (
+                <li>
+                  <span>{partner.name}</span>
+                  {partner.role && (
+                    <span class="partner-role">
+                      {" — "}
+                      {partner.role}
+                    </span>
+                  )}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        {
+          concert.data.url && (
+            <a
+              class="concert-external-link"
+              href={concert.data.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Informations / billetterie →
+            </a>
+          )
+        }
+
+      </aside>
+
+    </div>
+
+    <a class="back-link" href="/concerts/">
+      ← Tous les concerts
+    </a>
+
+  </main>
+</Layout>

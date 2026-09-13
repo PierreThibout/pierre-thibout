@@ -1,0 +1,91 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+
+const concerts = await getCollection("concerts");
+
+const sortedConcerts = concerts.sort((a, b) => {
+  const dateA = new Date(
+    `${a.data.date.toISOString().split("T")[0]}T${a.data.time}`
+  );
+
+  const dateB = new Date(
+    `${b.data.date.toISOString().split("T")[0]}T${b.data.time}`
+  );
+
+  return dateA.getTime() - dateB.getTime();
+});
+
+function formatDate(date: Date) {
+  return date
+    .toLocaleDateString("fr-FR", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    })
+    .replace(/^./, (letter) => letter.toUpperCase());
+}
+
+function formatTime(time: string) {
+  return time.replace(":", "h");
+}
+
+function getYear(date: Date) {
+  return date.getFullYear();
+}
+---
+
+<Layout title="Concerts">
+  <main class="concerts-page">
+    <header class="page-header">
+      <p class="eyebrow">Agenda</p>
+      <h1>Concerts</h1>
+    </header>
+
+    <div class="concert-list">
+      {
+        sortedConcerts.map((concert, index) => {
+          const previousConcert = sortedConcerts[index - 1];
+          const showYear =
+            !previousConcert ||
+            getYear(previousConcert.data.date) !== getYear(concert.data.date);
+
+          return (
+            <>
+              {showYear && (
+                <div class="concert-year">
+                  {getYear(concert.data.date)}
+                </div>
+              )}
+
+              <a
+                class="concert-item"
+                href={`/concerts/${concert.id}/`}
+              >
+                <div class="concert-item-date">
+                  <span>
+                    {formatDate(concert.data.date)}
+                  </span>
+                  <span class="concert-item-time">
+                    {formatTime(concert.data.time)}
+                  </span>
+                </div>
+
+                <div class="concert-item-main">
+                  <h2>{concert.data.title}</h2>
+
+                  <p class="concert-item-location">
+                    {concert.data.venue} · {concert.data.city}
+                  </p>
+                </div>
+
+                <span class="concert-arrow">→</span>
+              </a>
+            </>
+          );
+        })
+      }
+    </div>
+  </main>
+</Layout>

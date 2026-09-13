@@ -1,0 +1,45 @@
+---
+import Navigation from "../components/Navigation.astro";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <meta
+      name="description"
+      content="Site officiel de Pierre Thibout, pianiste."
+    />
+
+    <title>Pierre Thibout — {title}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class={Astro.url.pathname === "/" ? "home-page" : ""}>
+    <header>
+      <Navigation />
+    </header>
+
+    <slot />
+
+    <footer>
+      <p>© {new Date().getFullYear()} Pierre Thibout</p>
+    </footer>
+  </body>
+</html>

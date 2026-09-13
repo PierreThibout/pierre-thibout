@@ -1,0 +1,21 @@
+---
+const links = [
+  { href: "/concerts/", label: "Concerts" },
+  { href: "/partitions/", label: "Partitions" },
+  { href: "/videos/", label: "Vidéos" },
+  { href: "/enregistrements/", label: "Enregistrements" },
+  { href: "/a-propos/", label: "À propos" },
+];
+---
+
+<nav class="site-nav">
+  <a class="site-name" href="/">Pierre Thibout</a>
+
+  <div class="nav-links">
+    {
+      links.map((link) => (
+        <a href={link.href}>{link.label}</a>
+      ))
+    }
+  </div>
+</nav>

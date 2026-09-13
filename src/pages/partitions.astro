@@ -1,0 +1,64 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+
+const partitions = await getCollection("partitions");
+
+const sortedPartitions = partitions.sort((a, b) =>
+  a.data.composer.localeCompare(b.data.composer, "fr")
+);
+---
+
+<Layout title="Partitions">
+  <main class="partitions-page">
+    <header class="page-header">
+      <p class="eyebrow">Ressources</p>
+      <h1>Partitions</h1>
+    </header>
+
+    <section class="partitions-intro">
+      <p>
+        Une sélection de partitions proposées librement et gratuitement à la consultation et au téléchargement.
+      </p>
+    </section>
+
+    <section class="partition-list" aria-label="Partitions disponibles">
+      {
+        sortedPartitions.map(async (partition) => {
+          const { Content } = await render(partition);
+
+          return (
+            <article class="partition-item">
+              <div class="partition-main">
+                <p class="partition-composer">
+                  {partition.data.composer}
+                </p>
+
+                <h2>{partition.data.title}</h2>
+
+                <div class="partition-description">
+                  <Content />
+                </div>
+              </div>
+
+              <div class="partition-meta">
+                <span class="partition-type">
+                  {partition.data.type}
+                </span>
+
+                <a
+                  class="partition-download"
+                  href={partition.data.file}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Télécharger le PDF →
+                </a>
+              </div>
+            </article>
+          );
+        })
+      }
+    </section>
+  </main>
+</Layout>

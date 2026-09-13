@@ -1,0 +1,130 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import pierrePhoto from "../assets/images/pierre-thibout.jpg";
+
+const concerts = await getCollection("concerts");
+
+const upcomingConcerts = concerts
+  .filter((concert) => concert.data.date >= new Date())
+  .sort((a, b) => {
+    const dateA = new Date(
+      `${a.data.date.toISOString().split("T")[0]}T${a.data.time}`
+    );
+
+    const dateB = new Date(
+      `${b.data.date.toISOString().split("T")[0]}T${b.data.time}`
+    );
+
+    return dateA.getTime() - dateB.getTime();
+  })
+  .slice(0, 3);
+
+function formatDate(date: Date) {
+  return date
+    .toLocaleDateString("fr-FR", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    })
+    .replace(/^./, (letter) => letter.toUpperCase());
+}
+
+function formatTime(time: string) {
+  return time.replace(":", "h");
+}
+---
+
+<Layout title="Pianiste">
+  <main>
+    <section class="hero">
+      <div class="hero-image">
+        <img
+          src={pierrePhoto.src}
+          alt="Pierre Thibout au piano"
+        />
+      </div>
+
+      <div class="hero-content">
+        <p class="eyebrow">Bienvenue !</p>
+
+        <h1>Pierre Thibout</h1>
+
+        <p class="intro">
+          claviers d’orchestre · musique de chambre · accompagnement
+        </p>
+
+        <a class="hero-link" href="/a-propos/">
+          À propos
+        </a>
+      </div>
+    </section>
+
+    <div class="home-sections">
+      <section class="home-section">
+        <div class="section-heading">
+          <p class="eyebrow">À venir</p>
+          <h2>Prochains concerts</h2>
+        </div>
+
+        {
+          upcomingConcerts.length > 0 ? (
+            <div class="home-concerts">
+              {upcomingConcerts.map((concert) => (
+                <a
+                  class="home-concert"
+                  href={`/concerts/${concert.id}/`}
+                >
+                  <p class="concert-date">
+                    {formatDate(concert.data.date)}
+                    {" à "}
+                    {formatTime(concert.data.time)}
+                  </p>
+
+                  <h3>{concert.data.title}</h3>
+
+                  <p class="concert-location">
+                    {concert.data.venue} · {concert.data.city}
+                  </p>
+                </a>
+              ))}
+            </div>
+          ) : (
+            <p>Aucun concert à venir pour le moment.</p>
+          )
+        }
+
+        <a class="text-link" href="/concerts/">
+          Voir tous les concerts →
+        </a>
+      </section>
+
+      <section class="home-section home-about">
+        <div class="section-heading">
+          <p class="eyebrow">À propos</p>
+          <h2>Un musicien aux multiples facettes</h2>
+        </div>
+
+        <p>
+          Pierre Thibout intègre le Conservatoire de Paris en 2011
+          dans les classes d’écriture puis d’accompagnement,
+          de direction de chant et d’accompagnement vocal.
+        </p>
+
+        <p>
+          Il se passionne pour le répertoire chambriste, le lied et la mélodie
+          autant que pour les grandes pages lyriques et symphoniques.
+        </p>
+
+        <p>
+          Il est nommé en 2018 au poste de claviers solo de l’Orchestre National de Lyon.
+        </p>
+
+        <a class="text-link" href="/a-propos/">
+          En savoir plus →
+        </a>
+      </section>
+    </div>
+  </main>
+</Layout>
