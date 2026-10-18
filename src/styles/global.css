@@ -1175,3 +1175,19 @@ footer p {
     animation-iteration-count: 1 !important;
   }
 }
+
+/* =========================================================
+   Sections de la page Concerts
+   ========================================================= */
+
+.concert-section-title {
+  margin: 0 0 30px;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.concert-archive {
+  margin-top: 100px;
+}

@@ -4,20 +4,20 @@ import Layout from "../layouts/Layout.astro";
 import pierrePhoto from "../assets/images/pierre-thibout.jpg";
 
 const concerts = await getCollection("concerts");
+const now = new Date();
+
+function getConcertDateTime(concert: (typeof concerts)[number]) {
+  const date = concert.data.date.toISOString().split("T")[0];
+  return new Date(`${date}T${concert.data.time}`);
+}
 
 const upcomingConcerts = concerts
-  .filter((concert) => concert.data.date >= new Date())
-  .sort((a, b) => {
-    const dateA = new Date(
-      `${a.data.date.toISOString().split("T")[0]}T${a.data.time}`
-    );
-
-    const dateB = new Date(
-      `${b.data.date.toISOString().split("T")[0]}T${b.data.time}`
-    );
-
-    return dateA.getTime() - dateB.getTime();
-  })
+  .filter((concert) => getConcertDateTime(concert) >= now)
+  .sort(
+    (a, b) =>
+      getConcertDateTime(a).getTime() -
+      getConcertDateTime(b).getTime()
+  )
   .slice(0, 3);
 
 function formatDate(date: Date) {

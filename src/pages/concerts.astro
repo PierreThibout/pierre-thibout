@@ -3,18 +3,28 @@ import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 
 const concerts = await getCollection("concerts");
+const now = new Date();
 
-const sortedConcerts = concerts.sort((a, b) => {
-  const dateA = new Date(
-    `${a.data.date.toISOString().split("T")[0]}T${a.data.time}`
+function getConcertDateTime(concert: (typeof concerts)[number]) {
+  const date = concert.data.date.toISOString().split("T")[0];
+  return new Date(`${date}T${concert.data.time}`);
+}
+
+const upcomingConcerts = concerts
+  .filter((concert) => getConcertDateTime(concert) >= now)
+  .sort(
+    (a, b) =>
+      getConcertDateTime(a).getTime() -
+      getConcertDateTime(b).getTime()
   );
 
-  const dateB = new Date(
-    `${b.data.date.toISOString().split("T")[0]}T${b.data.time}`
+const pastConcerts = concerts
+  .filter((concert) => getConcertDateTime(concert) < now)
+  .sort(
+    (a, b) =>
+      getConcertDateTime(b).getTime() -
+      getConcertDateTime(a).getTime()
   );
-
-  return dateA.getTime() - dateB.getTime();
-});
 
 function formatDate(date: Date) {
   return date
@@ -36,56 +46,111 @@ function getYear(date: Date) {
 }
 ---
 
-<Layout title="Concerts">
+<Layout title="Pierre Thibout — Concerts">
   <main class="concerts-page">
     <header class="page-header">
       <p class="eyebrow">Agenda</p>
       <h1>Concerts</h1>
     </header>
 
-    <div class="concert-list">
+    <section>
+      <h2 class="concert-section-title">Prochains concerts</h2>
+
       {
-        sortedConcerts.map((concert, index) => {
-          const previousConcert = sortedConcerts[index - 1];
-          const showYear =
-            !previousConcert ||
-            getYear(previousConcert.data.date) !== getYear(concert.data.date);
+        upcomingConcerts.length > 0 ? (
+          <div class="concert-list">
+            {upcomingConcerts.map((concert, index) => {
+              const previousConcert = upcomingConcerts[index - 1];
+              const showYear =
+                !previousConcert ||
+                getYear(previousConcert.data.date) !==
+                  getYear(concert.data.date);
 
-          return (
-            <>
-              {showYear && (
-                <div class="concert-year">
-                  {getYear(concert.data.date)}
-                </div>
-              )}
+              return (
+                <>
+                  {showYear && (
+                    <div class="concert-year">
+                      {getYear(concert.data.date)}
+                    </div>
+                  )}
 
-              <a
-                class="concert-item"
-                href={`/concerts/${concert.id}/`}
-              >
-                <div class="concert-item-date">
-                  <span>
-                    {formatDate(concert.data.date)}
-                  </span>
-                  <span class="concert-item-time">
-                    {formatTime(concert.data.time)}
-                  </span>
-                </div>
+                  <a
+                    class="concert-item"
+                    href={`/concerts/${concert.id}/`}
+                  >
+                    <div class="concert-item-date">
+                      <span>{formatDate(concert.data.date)}</span>
+                      <span class="concert-item-time">
+                        {formatTime(concert.data.time)}
+                      </span>
+                    </div>
 
-                <div class="concert-item-main">
-                  <h2>{concert.data.title}</h2>
+                    <div class="concert-item-main">
+                      <h2>{concert.data.title}</h2>
+                      <p class="concert-item-location">
+                        {concert.data.venue} · {concert.data.city}
+                      </p>
+                    </div>
 
-                  <p class="concert-item-location">
-                    {concert.data.venue} · {concert.data.city}
-                  </p>
-                </div>
-
-                <span class="concert-arrow">→</span>
-              </a>
-            </>
-          );
-        })
+                    <span class="concert-arrow">→</span>
+                  </a>
+                </>
+              );
+            })}
+          </div>
+        ) : (
+          <p>Aucun concert à venir pour le moment.</p>
+        )
       }
-    </div>
+    </section>
+
+    {
+      pastConcerts.length > 0 && (
+        <section class="concert-archive">
+          <h2 class="concert-section-title">Archives des concerts</h2>
+
+          <div class="concert-list">
+            {pastConcerts.map((concert, index) => {
+              const previousConcert = pastConcerts[index - 1];
+              const showYear =
+                !previousConcert ||
+                getYear(previousConcert.data.date) !==
+                  getYear(concert.data.date);
+
+              return (
+                <>
+                  {showYear && (
+                    <div class="concert-year">
+                      {getYear(concert.data.date)}
+                    </div>
+                  )}
+
+                  <a
+                    class="concert-item"
+                    href={`/concerts/${concert.id}/`}
+                  >
+                    <div class="concert-item-date">
+                      <span>{formatDate(concert.data.date)}</span>
+                      <span class="concert-item-time">
+                        {formatTime(concert.data.time)}
+                      </span>
+                    </div>
+
+                    <div class="concert-item-main">
+                      <h2>{concert.data.title}</h2>
+                      <p class="concert-item-location">
+                        {concert.data.venue} · {concert.data.city}
+                      </p>
+                    </div>
+
+                    <span class="concert-arrow">→</span>
+                  </a>
+                </>
+              );
+            })}
+          </div>
+        </section>
+      )
+    }
   </main>
 </Layout>
